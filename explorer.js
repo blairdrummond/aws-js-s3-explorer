@@ -165,7 +165,10 @@ function SharedService($rootScope) {
 
         // AWS.config.update(settings.cred);
         // AWS.config.update({ region: settings.region });
-        AWS.config.update(Object.assign(settings.cred, { region: settings.region }));
+        AWS.config.update(Object.assign(settings.cred, { 
+            region: settings.region,
+            ep: document.location.hostname
+        }));
 
         if (this.skew) {
             this.correctClockSkew(settings.bucket);
@@ -311,7 +314,7 @@ function ViewController($scope, SharedService) {
         } else {
             // Authenticated user has clicked on an object so create pre-signed
             // URL and download it in new window/tab
-            const s3 = new AWS.S3();
+            const s3 = new AWS.S3({endpoint: `${document.location.protocol}//${document.location.hostname}`});
             const params = {
                 Bucket: $scope.view.settings.bucket, Key: target.dataset.s3key, Expires: 15,
             };
@@ -1465,6 +1468,9 @@ $(document).ready(() => {
     // Default AWS region and v4 signature
     AWS.config.update({ region: '' });
     AWS.config.update({ signatureVersion: 'v4' });
+    AWS.config.update({ endpoint: `${document.location.protocol}//${document.location.host}`});
+    AWS.config.update({ s3ForcePathStyle: true });
+
 
     // Show navbuttons
     $('#navbuttons').removeClass('hidden');
