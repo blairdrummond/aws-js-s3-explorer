@@ -115,7 +115,7 @@ function path2short(path, escape = false) {
 // Virtual-hosted-style URL, ex: https://mybucket1.s3.amazonaws.com/index.html
 function object2hrefvirt(bucket, key, escape = false) {
     const enckey = key.split('/').map(x => encodeURIComponent(x)).join('/');
-    const rc = `${document.location.protocol}//${bucket}.s3.amazonaws.com/${enckey}`;
+    const rc = `${document.location.protocol}//${document.location.host}/${bucket}/${enckey}`;
     return escape ? htmlEscape(rc) : rc;
 }
 
@@ -123,7 +123,7 @@ function object2hrefvirt(bucket, key, escape = false) {
 // eslint-disable-next-line no-unused-vars
 function object2hrefpath(bucket, key, escape = false) {
     const enckey = key.split('/').map(x => encodeURIComponent(x)).join('/');
-    const rc = `${document.location.protocol}//s3.amazonaws.com/${bucket}/${enckey}`;
+    const rc = `${document.location.protocol}//${document.location.host}/${bucket}/${enckey}`;
     return escape ? htmlEscape(rc) : rc;
 }
 
